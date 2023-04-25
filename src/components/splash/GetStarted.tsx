@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import Card from "../ui/Card";
 import styles from "./GetStarted.module.css";
+import useForm from "../../hooks/useForm";
 
 const GetStarted = () => {
   const [action, setAction] = useState("");
+
+  const {
+    input: emailInput,
+    isValid: emailIsValid,
+    hasError: emailHasError,
+    setInputHandler: setEmailInputHandler,
+    setTouchedHandler: setEmailTouchedHandler,
+    reset: resetEmail} = useForm((input : string) => input.trim() !== "")
 
   return (
     <Card>
