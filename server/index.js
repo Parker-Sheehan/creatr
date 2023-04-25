@@ -6,9 +6,11 @@ const {user} = require('./models/user')
 
 const express = require('express')
 const cors = require('cors')
+const { register } = require
 
 
 const {PORT} = process.env
+const {signUp} = require('./controller/account')
 
 const app = express()
 
@@ -17,6 +19,9 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+
+//AUTH
+app.post('/signUp', signUp)
 
 db
     .sync()
