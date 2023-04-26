@@ -2,7 +2,7 @@ require('dotenv').config()
 
 
 const {db} = require('./utils/database')
-const {user} = require('./models/user')
+const {User} = require('./models/user')
 
 const express = require('express')
 const cors = require('cors')

@@ -6,7 +6,25 @@ import axios from "axios";
 
 const GetStarted = () => {
   const [action, setAction] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const {
+    input: logEmailInput,
+    isValid: logEmailIsValid,
+    hasError: logEmailHasError,
+    setInputHandler: setlogEmailInputHandler,
+    setTouchedHandler: setlogEmailTouchedHandler,
+    reset: resetlogEmail,
+  } = useForm((input: string) => input.trim() !== "" && input.includes("@"));
+
+  const {
+    input: logPassInput,
+    isValid: logPassIsValid,
+    hasError: logPassHasError,
+    setInputHandler: setlogPassInputHandler,
+    setTouchedHandler: setlogPassTouchedHandler,
+    reset: resetlogPass,
+  } = useForm((input: string) => input.trim() !== "" && input.length >= 8);
 
   const {
     input: nameInput,
@@ -47,29 +65,48 @@ const GetStarted = () => {
       input.trim() !== "" && input.length >= 8 && input === passInput
   );
 
-  const signUpSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true)
-    const newAccObj: {name: string, email: string, password: string} = {
-      name: nameInput,
-      email: emailInput,
-      password : passInput
-    }
-    console.log(newAccObj)
+  const resetLogIn = () => {
+    resetlogPass();
+    resetlogEmail();
+  };
 
-    axios.post('/signUp', newAccObj)
-          .then((data) => {
-            console.log(data)
-          })
-
+  const resetSignUp = () => {
     resetName();
     resetEmail();
     resetPass();
     resetConPass();
-    setLoading(false)
   };
 
-  const signUpAllValid = emailIsValid && passIsValid && conPassIsValid && nameIsValid;
+  const signUpSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    const newAccObj: { name: string; email: string; password: string } = {
+      name: nameInput,
+      email: emailInput,
+      password: passInput,
+    };
+    console.log(newAccObj);
+
+    axios.post("/signUp", newAccObj).then((data) => {
+      console.log(data);
+    });
+
+    resetSignUp();
+    setLoading(false);
+  };
+
+  const logInAllValid = logEmailIsValid && logPassIsValid;
+
+  const logEmailInputClasses = logEmailHasError
+    ? `${styles.control} ${styles.invalid}`
+    : styles.control;
+
+  const logPassInputClasses = logPassHasError
+    ? `${styles.control} ${styles.invalid}`
+    : styles.control;
+
+  const signUpAllValid =
+    emailIsValid && passIsValid && conPassIsValid && nameIsValid;
 
   const nameInputClasses = nameHasError
     ? `${styles.control} ${styles.invalid}`
@@ -88,6 +125,7 @@ const GetStarted = () => {
     : styles.control;
 
   const signUpSubmitButtonClasses = signUpAllValid ? styles.btn : styles.btnW;
+  const logInSubmitButtonClasses = logInAllValid ? styles.btn : styles.btnW;
 
   return (
     <Card>
@@ -107,22 +145,51 @@ const GetStarted = () => {
         <div className={styles.sub_card}>
           <h1>Log in</h1>
           <form className={styles.form} action="">
-            <div className={emailInputClasses}>
+            <div className={logEmailInputClasses}>
               <label>Email: </label>
-              <input type="email" id="email" />
-              {emailHasError && (
+              <input
+                type="email"
+                id="email"
+                value={logEmailInput}
+                onChange={setlogEmailInputHandler}
+                onBlur={setlogEmailTouchedHandler}
+              />
+              {logEmailHasError && (
                 <p style={{ color: "#aa0b20" }}>
                   A valid email must be entered
                 </p>
               )}
             </div>
-            <div>
+            <div className={logPassInputClasses}>
               <label>Password: </label>
-              <input type="password" />
+              <input
+                type="password"
+                id="password"
+                value={logPassInput}
+                onChange={setlogPassInputHandler}
+                onBlur={setlogPassTouchedHandler}
+              />
+              {logPassHasError && (
+                <p style={{ color: "#aa0b20" }}>
+                  A valid password must be entered
+                </p>
+              )}
             </div>
-            <button>Log In</button>
+            <button
+              className={logInSubmitButtonClasses}
+              disabled={!logInAllValid}
+            >
+              Log In
+            </button>
           </form>
-          <a onClick={() => setAction("signup")}>to sign up</a>
+          <a
+            onClick={() => {
+              setAction("signup");
+              resetLogIn();
+            }}
+          >
+            to sign up
+          </a>
         </div>
       )}
       {action === "signup" && (
@@ -143,9 +210,7 @@ const GetStarted = () => {
                 onBlur={setNameTouchedHandler}
               />
               {nameHasError && (
-                <p style={{ color: "#aa0b20" }}>
-                  A valid name must be entered
-                </p>
+                <p style={{ color: "#aa0b20" }}>A valid name must be entered</p>
               )}
             </div>
             <div className={emailInputClasses}>
@@ -200,7 +265,14 @@ const GetStarted = () => {
               Sign Up
             </button>
           </form>
-          <a onClick={() => setAction("login")}>to log in</a>
+          <a
+            onClick={() => {
+              setAction("login");
+              resetSignUp();
+            }}
+          >
+            to log in
+          </a>
         </div>
       )}
     </Card>
