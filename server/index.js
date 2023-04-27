@@ -7,19 +7,30 @@ const {Photo} = require('./models/photo')
 const {Message} = require('./models/messages')
 const {Interaction} = require('./models/interaction')
 const {ChatRoom} = require('./models/chatRoom')
+const {authenticate} = require('./middleware/authenticated')
 
 
 const express = require('express')
 const cors = require('cors')
-const { register } = require
 
-
-const {PORT} = process.env
-const {signUp, logIn} = require('./controller/account')
+const {signUp, logIn, addInfo} = require('./controller/account')
 
 const app = express()
 
+User.hasMany(Interaction)
+Interaction.belongsTo(User)
 
+User.hasMany(Photo)
+Photo.belongsTo(User)
+
+User.hasMany(ChatRoom)
+ChatRoom.belongsTo(User)
+
+User.hasMany(Message)
+Message.belongsTo(User)
+
+ChatRoom.hasMany(Message)
+Message.belongsTo(ChatRoom)
 
 
 app.use(express.json())
@@ -28,7 +39,7 @@ app.use(cors())
 //AUTH
 app.post('/signUp', signUp)
 app.post('/logIn', logIn)
-// app.post('/bio/:id', addBio)
+app.put('/addInfo/:id', authenticate ,addInfo)
 
 
 db

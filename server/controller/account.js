@@ -78,4 +78,16 @@ module.exports = {
       res.sendStatus(400);
     }
   },
+  addInfo: async (req,res) => {
+    try{
+      console.log('in addInfo')
+      console.log(req.body)
+      console.log(req.params)
+    }
+    catch(err){
+      console.log('err in addInfo')
+      console.log(err)
+      res.sendStatus(400)
+    }
+  }
 };

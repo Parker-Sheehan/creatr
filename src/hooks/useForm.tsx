@@ -7,7 +7,7 @@ const useForm = (condition : Function) => {
     const isValid : boolean = condition(input)
     const hasError = !isValid && touched
 
-    const setInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const setInputHandler = (event: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLTextAreaElement>) => {
         setInput(event.target.value)
     }
 

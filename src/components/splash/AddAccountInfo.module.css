@@ -1,16 +1,53 @@
-.main{
-    padding: 50px;
-    min-height: 100vh;
-    width: 60vw;
-    background-color: white;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.main {
+  padding: 50px;
+  min-height: 100vh;
+  width: 60vw;
+  background-color: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.textarea{
-    width: 600px;
-    height: 300px;
+.textarea {
+  width: 600px;
+  height: 300px;
+}
+
+
+.btn {
+  width: 280px;
+  height: 30px;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  background-color: #8656e0;
+}
+
+.btn:hover {
+  background-color: #8656e0d0;
+}
+
+.btnW {
+  width: 280px;
+  height: 30px;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+
+.control{
+
+}
+
+
+.invalid> label {
+    color: #ca3e51;
+  }
+  
+.invalid {
+  border-color: #aa0b20;
+  background-color: #ffeff1;
 }
