@@ -3,20 +3,20 @@ const {DataTypes} = require('sequelize')
 const {db} = require('../utils/database')
 
 module.exports = {
-    Photo : db.define('photo', {
+    ChatRoom : db.define('chatRoom', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true
         },
-        url: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        user_id: {
+        user_1: {
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'id' }
         },
+        user_2: {
+            type: DataTypes.INTEGER,
+            references: { model: 'users', key: 'id' }
+        }
     })
 }

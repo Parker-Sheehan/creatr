@@ -13,6 +13,12 @@ module.exports = {
         name: DataTypes.STRING,
         email:DataTypes.STRING,
         hashedPass: DataTypes.STRING,
-        bio: DataTypes.STRING
+        bio: {
+            type: DataTypes.STRING,
+            defaultValue: ""
+        },
+        photo_added: {
+            type:DataTypes.BOOLEAN,
+        defaultValue: false}
     })
 }

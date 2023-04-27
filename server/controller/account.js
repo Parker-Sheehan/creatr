@@ -31,15 +31,49 @@ module.exports = {
         console.log(token);
         const exp = Date.now() + 1000 * 60 * 60 * 48;
         let bodyObj = {
-            email: newAccount.dataValues.email,
-            userId: newAccount.dataValues.id,
-            token: token,
-            exp: exp
+          email: newAccount.dataValues.email,
+          userId: newAccount.dataValues.id,
+          bio: newAccount.dataValues.bio,
+          photo_added: newAccount.dataValues.photo_added,
+          token: token,
+          exp: exp,
         };
-        res.status(200).send(bodyObj)
+        res.status(200).send(bodyObj);
       }
     } catch (err) {
       console.log("error in reg");
+      console.log(err);
+      res.sendStatus(400);
+    }
+  },
+  logIn: async (req, res) => {
+    try {
+      let { email, password } = req.body;
+      let foundUser = await User.findOne({ where: { email: email } });
+      if (foundUser) {
+        if (bcrypt.compareSync(password, foundUser.hashedPass)) {
+          let token = createToken(
+            foundUser.dataValues.email,
+            foundUser.dataValues.id
+          );
+          const exp = Date.now() + 1000 * 60 * 60 * 48;
+          let bodyObj = {
+            email: foundUser.dataValues.email,
+            userId: foundUser.dataValues.id,
+            bio: foundUser.dataValues.bio,
+            photo_added: foundUser.dataValues.photo_added,
+            token: token,
+            exp: exp,
+          };
+          res.status(200).send(bodyObj);
+        } else {
+          res.status(400).send("incorect password, please try again");
+        }
+      } else {
+        res.status(400).send("sorry that email isn't in our database");
+      }
+    } catch (err) {
+      console.log("error in loggin");
       console.log(err);
       res.sendStatus(400);
     }

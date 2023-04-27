@@ -3,20 +3,24 @@ const {DataTypes} = require('sequelize')
 const {db} = require('../utils/database')
 
 module.exports = {
-    Photo : db.define('photo', {
+    Interaction : db.define('interaction', {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             allowNull: false,
             primaryKey: true
         },
-        url: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        user_id: {
+        doingInteraction: {
             type: DataTypes.INTEGER,
             references: { model: 'users', key: 'id' }
         },
+        beingInteractedWith: {
+            type: DataTypes.INTEGER,
+            references: { model: 'users', key: 'id' }
+        },
+        liked: {
+            type: DataTypes.BOOLEAN
+        }
+
     })
 }
