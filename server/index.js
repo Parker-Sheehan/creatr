@@ -14,6 +14,7 @@ const express = require('express')
 const cors = require('cors')
 
 const {signUp, logIn, addInfo} = require('./controller/account')
+const {getProfiles} = require('./controller/interaction')
 
 const app = express()
 
@@ -36,10 +37,13 @@ Message.belongsTo(ChatRoom)
 app.use(express.json())
 app.use(cors())
 
-//AUTH
+//account stuff
 app.post('/signUp', signUp)
 app.post('/logIn', logIn)
 app.put('/addInfo/:id', authenticate ,addInfo)
+
+//interactability
+app.post('/profiles', authenticate, getProfiles)
 
 
 db

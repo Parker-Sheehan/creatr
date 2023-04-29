@@ -83,6 +83,24 @@ module.exports = {
       console.log('in addInfo')
       console.log(req.body)
       console.log(req.params)
+
+      let {bio, image} = req.body
+      let userId = req.params.id
+
+      console.log(req.params.id)
+      console.log('line 89')
+      let foundUser = await User.findOne({ where: { id: userId } })
+      console.log('line 91')
+      foundUser.set({bio:bio, photo_added: image})
+      console.log('line 93')
+      await foundUser.save()
+
+
+      let bodyObj = {
+        bio: foundUser.dataValues.bio,
+        photo_added: foundUser.dataValues.photo_added,
+      };
+      res.status(200).send(bodyObj);
     }
     catch(err){
       console.log('err in addInfo')

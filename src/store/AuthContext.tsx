@@ -1,4 +1,5 @@
 import React, {ReactNode} from "react"
+import { useNavigate } from "react-router-dom";
 
 let logoutTimer:ReturnType<typeof setTimeout> | number;
 
@@ -30,6 +31,9 @@ const getLocalData = () => {
 
 export const AuthContextProvider = (children : { children: ReactNode }) => {
 
+    const navigate = useNavigate()
+
+
     const login = (token: string, exp:number, Id: number, bio: string, photo_added: boolean) => {
     localStorage.setItem("token", token)
     localStorage.setItem("exp", `${exp}`)
@@ -44,6 +48,9 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
     const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("exp");
+    localStorage.removeItem("bio");
+    localStorage.removeItem("photo_added");
+    navigate("/")
     }
 
     const authFunctions = {

@@ -23,7 +23,8 @@ function App() {
     <div className="App">
       <Routes>
       {!localStorage.getItem("token") && <Route index element={<GetStarted/>}/>}
-      {localStorage.getItem("token") && localStorage.getItem("bio") !== "" && localStorage.getItem("photo_added") === 'true' && <Route index element={<Main/>}/>}
+      {localStorage.getItem("token") && localStorage.getItem("bio") !== "" && localStorage.getItem("photo_added") !== '' && <Route index element={<Main/>}/>}
+      {/* {localStorage.getItem("token") && localStorage.getItem("bio") !== "" && localStorage.getItem("photo_added") !== '' && <Route path='/profile' element={<UserProfile/>}/>} */}
       <Route path='/AddAccountInfo' element={<AddAccountInfo/>}/>
       </Routes>
     </div>

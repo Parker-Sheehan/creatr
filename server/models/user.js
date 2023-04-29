@@ -18,7 +18,7 @@ module.exports = {
             defaultValue: ""
         },
         photo_added: {
-            type:DataTypes.BOOLEAN,
-        defaultValue: false}
+            type:DataTypes.STRING,
+        defaultValue: ""}
     })
 }

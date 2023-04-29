@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 const SignUp = (props: any) => {
     const authCtx = useContext(AuthContext)
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState("")
 
   const {
     input: nameInput,
@@ -70,12 +71,16 @@ const SignUp = (props: any) => {
       console.log(data.data);
       let {exp, token, userId, bio, photo_added} = data.data
       authCtx.login(token, exp, userId, bio, photo_added)
-    });
-
-    resetSignUp();
+      resetSignUp();
+      navigate("/AddAccountInfo")
+    })
+    .catch((err)=> {
+      console.log(err.response.data)
+      setErrorMessage(err.response.data)
+    })
     props.setLoadingHandler(false);
-    navigate("/AddAccountInfo")
   };
+  console.log(errorMessage)
 
   const signUpAllValid =
     emailIsValid && passIsValid && conPassIsValid && nameIsValid;
@@ -163,12 +168,16 @@ const SignUp = (props: any) => {
           Sign Up
         </button>
       </form>
+      <div>
+      {errorMessage && <p> {errorMessage}</p>}
+      </div>
       <a
         onClick={() => {
           props.setLogInHandler();
 
           resetSignUp();
         }}
+
       >
         to log in
       </a>
