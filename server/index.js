@@ -14,12 +14,12 @@ const express = require('express')
 const cors = require('cors')
 
 const {signUp, logIn, addInfo} = require('./controller/account')
-const {getProfiles} = require('./controller/interaction')
+const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser} = require('./controller/interaction')
 
 const app = express()
 
 User.hasMany(Interaction)
-Interaction.belongsTo(User)
+Interaction.belongsTo(User, {foreignKey: 'doingInteractiond'})
 
 User.hasMany(Photo)
 Photo.belongsTo(User)
@@ -44,6 +44,11 @@ app.put('/addInfo/:id', authenticate ,addInfo)
 
 //interactability
 app.post('/profiles', authenticate, getProfiles)
+app.post('/userProfile', authenticate, userProfile)
+app.delete('/destroy', authenticate, destroyUser)
+app.post('/like', authenticate, likeUser)
+app.post('/dislike', authenticate, dislikeUser)
+
 
 
 db

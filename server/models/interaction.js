@@ -12,11 +12,9 @@ module.exports = {
         },
         doingInteraction: {
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'id' }
         },
         beingInteractedWith: {
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'id' }
         },
         liked: {
             type: DataTypes.BOOLEAN

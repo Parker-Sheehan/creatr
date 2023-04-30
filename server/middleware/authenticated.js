@@ -4,6 +4,7 @@ const {SECRET} = process.env
 
 module.exports = {
     authenticate: (req, res, next) => {
+        console.log(req.body)
         const token = req.body.token
 
         if (!token) {
@@ -15,6 +16,7 @@ module.exports = {
         
         try{
             verify = jwt.verify(token, SECRET) 
+            console.log(verify)
         }catch(err){
 
             throw err
@@ -27,6 +29,7 @@ module.exports = {
             throw error
         }
 
+    res.app.locals.userId = verify.id
         next()
 
 

@@ -14,7 +14,7 @@ const Main = () => {
   return (
     <div className={styles.main}>
       <SettingsMenu/>
-      <Profile />
+      <UserProfile />
       <Messages/>
     </div>
   );
