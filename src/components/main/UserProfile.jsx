@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styles from "../main/Profile.module.css";
 
 const UserProfile= () => {
   const [loading, setLoading] = useState(true);
   const [profileArray, setProfileArray] = useState([])
+  const navigate = useNavigate()
 
 
 
@@ -54,6 +56,9 @@ const UserProfile= () => {
         <p>{profileArray.bio}</p>
       </div>
     </div>
+    <button onClick={() => {
+      navigate('/editprofile')
+    }}>Edit</button>
   </div>}
     </div>
   );

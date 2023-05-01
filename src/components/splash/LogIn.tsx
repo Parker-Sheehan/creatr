@@ -57,8 +57,8 @@ const LogIn = (props: any) => {
 
     await axios.post("/logIn", newAccObj).then((data) => {
       console.log(data.data);
-      let {exp, token, userId, bio, photo_added} = data.data
-      authCtx.login(token, exp, userId, bio, photo_added)
+      let {exp, token, userId, bio, photo_added, name} = data.data
+      authCtx.login(token, exp, userId, bio, photo_added, name)
     });
 
     resetLogIn();

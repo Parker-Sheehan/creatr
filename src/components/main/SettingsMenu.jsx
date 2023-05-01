@@ -51,7 +51,7 @@ const SettingsMenu = () => {
           />
         </div>
         <div className={styles.profile}>
-          <h2>View Profile</h2>
+          <h2>Home Screen</h2>
           <AiOutlineHome size={25} className={styles.icon} onClick={() => {
             navigate('/')
           }}/>

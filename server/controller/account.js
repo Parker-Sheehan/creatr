@@ -1,5 +1,6 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
+const e = require("express");
 const jwt = require("jsonwebtoken");
 const SECRET = process.env.SECRET;
 const { User } = require("../models/user");
@@ -21,14 +22,11 @@ module.exports = {
         const salt = bcrypt.genSaltSync(12);
         const hash = bcrypt.hashSync(password, salt);
         const newAccount = await User.create({ name, email, hashedPass: hash });
-        console.log(newAccount);
 
-        console.log(newAccount.dataValues.email);
         const token = createToken(
           newAccount.dataValues.email,
           newAccount.dataValues.id
         );
-        console.log(token);
         const exp = Date.now() + 1000 * 60 * 60 * 48;
         let bodyObj = {
           email: newAccount.dataValues.email,
@@ -37,6 +35,7 @@ module.exports = {
           photo_added: newAccount.dataValues.photo_added,
           token: token,
           exp: exp,
+          name: name
         };
         res.status(200).send(bodyObj);
       }
@@ -64,6 +63,7 @@ module.exports = {
             photo_added: foundUser.dataValues.photo_added,
             token: token,
             exp: exp,
+            name: foundUser.dataValues.name
           };
           res.status(200).send(bodyObj);
         } else {
@@ -84,21 +84,26 @@ module.exports = {
       console.log(req.body)
       console.log(req.params)
 
-      let {bio, image} = req.body
+      let {bio, image, name} = req.body
       let userId = req.params.id
 
       console.log(req.params.id)
       console.log('line 89')
       let foundUser = await User.findOne({ where: { id: userId } })
       console.log('line 91')
-      foundUser.set({bio:bio, photo_added: image})
+      if(name){
+        foundUser.set({bio:bio, photo_added: image, name:name})
+      }else{
+        foundUser.set({bio:bio, photo_added: image})
+      }
       console.log('line 93')
       await foundUser.save()
 
 
       let bodyObj = {
+        name: foundUser.dataValues.name,
         bio: foundUser.dataValues.bio,
-        photo_added: foundUser.dataValues.photo_added,
+        photo_added: foundUser.dataValues.photo_added
       };
       res.status(200).send(bodyObj);
     }

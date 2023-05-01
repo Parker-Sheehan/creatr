@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 let logoutTimer:ReturnType<typeof setTimeout> | number;
 
 type AuthContextObj = {
-    login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean) => void;
+    login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name: string) => void;
     logout: () => void;
 }
 
 export const AuthContext = React.createContext<AuthContextObj>({
-    login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean) => {},
+    login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name:string) => {},
     logout: () => {},
 })
 
@@ -34,12 +34,13 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
     const navigate = useNavigate()
 
 
-    const login = (token: string, exp:number, Id: number, bio: string, photo_added: boolean) => {
+    const login = (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name: string) => {
     localStorage.setItem("token", token)
     localStorage.setItem("exp", `${exp}`)
     localStorage.setItem('id', `${Id}`)
     localStorage.setItem('bio', bio)
     localStorage.setItem('photo_added', `${photo_added}`)
+    localStorage.setItem('name', name)
 
     let remainingTime = calculateRemainingTime(exp);
     logoutTimer = setTimeout(logout, remainingTime);
