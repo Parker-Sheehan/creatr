@@ -140,6 +140,7 @@ module.exports = {
               { user_2: doingInteraction },
             ],
           },
+          attributes: {exclude: ['createdAt', 'updatedAt', 'userId']}
         });
         return res.status(200).send(arrOfChatRooms);
       }
@@ -167,4 +168,23 @@ module.exports = {
       res.sendStatus(400);
     }
   },
+  chatRoom: async (req,res) => {
+    try{
+      let userId = req.app.locals.userId;
+      let arrOfChatRooms = await ChatRoom.findAll({
+        where: {
+          [Op.or]: [
+            { user_1: userId },
+            { user_2: userId },
+          ],
+        },
+        attributes: {exclude: ['createdAt', 'updatedAt', 'userId']}
+      });
+      return res.status(200).send(arrOfChatRooms);
+    }catch (err) {
+      console.log("err in chatRoom");
+      console.log(err);
+      res.sendStatus(400);
+    }
+  }
 };

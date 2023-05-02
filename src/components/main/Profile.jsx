@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import AuthContext from "../../store/AuthContext";
 
 import styles from "./Profile.module.css";
 
@@ -9,6 +10,8 @@ const Profile = () => {
   const [enableRedo, setEnableRedo] = useState(false)
   const [previosProfile, setPreviousProfile] = useState({})
 
+  const ctx = useContext(AuthContext)
+
   useEffect(() => {
     const fetchData = async () => {
       const bodyObj = {
@@ -17,6 +20,9 @@ const Profile = () => {
       };
       const data = await axios.post("/profiles", bodyObj);
       setProfileArray(data.data);
+      const chatRooms = await axios.post("/chatRoom", bodyObj);
+      console.log(chatRooms.data)
+      ctx.chatRoomsArrayHandler(chatRooms.data)
       setLoading(false);
     };
 
@@ -31,6 +37,8 @@ const Profile = () => {
       token: localStorage.getItem("token"),
     };
     const data = await axios.post("/like", bodyObj);
+    console.log(data.data)
+    ctx.chatRoomsArrayHandler(data.data)
     let newArr = profileArray.slice(1);
 
     setProfileArray(newArr);
@@ -60,12 +68,15 @@ const Profile = () => {
     console.log(newArr)
     setProfileArray(newArr);
     setEnableRedo(false)
+    console.log(ctx.chatRooms)
   };
 
   console.log(previosProfile)
 
   return (
     <div>
+
+      {/* <p>{ctx.chatRooms}</p> */}
       {loading ? (
         <h2>Loading!</h2>
       ) : (

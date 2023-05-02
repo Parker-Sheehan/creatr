@@ -1,16 +1,22 @@
-import React, {ReactNode} from "react"
+import React, {ReactNode, useState} from "react"
 import { useNavigate } from "react-router-dom";
 
 let logoutTimer:ReturnType<typeof setTimeout> | number;
 
+type chatRoom = {id:number, user_1:number, user_2:number}
+
 type AuthContextObj = {
+    chatRooms: {id:number, user_1:number, user_2:number}[];
     login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name: string) => void;
     logout: () => void;
+    chatRoomsArrayHandler: ([]:chatRoom[]) => void;
 }
 
 export const AuthContext = React.createContext<AuthContextObj>({
+    chatRooms: [],
     login: (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name:string) => {},
     logout: () => {},
+    chatRoomsArrayHandler: ([]:chatRoom[]) => {},
 })
 
 const calculateRemainingTime = (exp: number) => {
@@ -33,6 +39,16 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
 
     const navigate = useNavigate()
 
+    const [chatRoomsArray,setchatRoomsArray] = useState<chatRoom[]>([]);
+
+
+    const chatRoomsArrayHandler = (arr:chatRoom[]) => {
+        console.log(arr[0])
+
+        setchatRoomsArray(arr)
+    }
+
+    console.log(typeof chatRoomsArray)
 
     const login = (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name: string) => {
     localStorage.setItem("token", token)
@@ -54,9 +70,13 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
     navigate("/")
     }
 
+    // const  chatRooms: {id:number, user_1:number, user_2:number}[] = []
+
     const authFunctions = {
+        chatRooms: chatRoomsArray,
         login,
         logout,
+        chatRoomsArrayHandler
     }
 
     return(

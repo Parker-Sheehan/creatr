@@ -12,11 +12,32 @@ const {authenticate} = require('./middleware/authenticated')
 
 const express = require('express')
 const cors = require('cors')
+const http = require('http')
+const { Server } = require('socket.io')
+const app = express()
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ["GET", "POST"]
+    }
+})
+
+io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`)
+
+    socket.on('join_room', (data) => {
+        socket.join(data);
+    });
+
+    socket.on('send_message', (data) => {
+        socket.broadcast.emit("receive_message", data)
+    })
+})
 
 const {signUp, logIn, addInfo} = require('./controller/account')
-const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser} = require('./controller/interaction')
+const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser, chatRoom} = require('./controller/interaction')
 
-const app = express()
 
 User.hasMany(Interaction)
 Interaction.belongsTo(User, {foreignKey: 'doingInteractiond'})
@@ -48,11 +69,12 @@ app.post('/userProfile', authenticate, userProfile)
 app.delete('/destroy', authenticate, destroyUser)
 app.post('/like', authenticate, likeUser)
 app.post('/dislike', authenticate, dislikeUser)
+app.post('/chatRoom', authenticate, chatRoom)
 
 
 
 db
     .sync()
     .then(() => {
-        app.listen(4000, () => console.log(`db sync successful & server runnig on port 4000`))
+        server.listen(4000, () => console.log(`db sync successful & server runnig on port 4000`))
     })
