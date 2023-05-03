@@ -2,6 +2,8 @@ const { User } = require("../models/user");
 const { Interaction } = require("../models/interaction");
 const { Op, where } = require("sequelize");
 const { ChatRoom } = require("../models/chatRoom");
+const { Message } = require("../models/messages")
+
 
 module.exports = {
   getProfiles: async (req, res) => {
@@ -128,10 +130,10 @@ module.exports = {
       console.log("++++++++++++Both_INTERACTED++++++++++++++");
       console.log(bothInteracted);
       if (bothInteracted) {
+        console.log('in Both Interacted')
         await ChatRoom.create({
           user_1: doingInteraction,
           user_2: beingInteractedWith,
-          userId: doingInteraction,
         });
         let arrOfChatRooms = await ChatRoom.findAll({
           where: {
@@ -144,7 +146,7 @@ module.exports = {
         });
         return res.status(200).send(arrOfChatRooms);
       }
-      res.sendStatus(200);
+      res.status(200).send('yay');
     } catch (err) {
       console.log("err in likeUser");
       console.log(err);
@@ -180,11 +182,30 @@ module.exports = {
         },
         attributes: {exclude: ['createdAt', 'updatedAt', 'userId']}
       });
-      return res.status(200).send(arrOfChatRooms);
+      return res.status(200).send([...arrOfChatRooms]);
     }catch (err) {
       console.log("err in chatRoom");
       console.log(err);
       res.sendStatus(400);
     }
+  },
+  sendMessage: async (req,res) => {
+    try{
+      let userId = req.app.locals.userId;
+      let {room, message} = req.body
+      console.log(req.body)
+      console.log(room)
+      console.log(message)
+  
+      
+      await Message.create({room_id: room, user_id: userId, message:message})
+      let findMessage = await Message.findAll({where: {room_id: room}})
+      return res.status(200).send(findMessage)
+    }catch (err) {
+      console.log("err in sendMessage");
+      console.log(err);
+      res.sendStatus(400);
+    }
+    
   }
 };

@@ -21,7 +21,9 @@ const Profile = () => {
       const data = await axios.post("/profiles", bodyObj);
       setProfileArray(data.data);
       const chatRooms = await axios.post("/chatRoom", bodyObj);
+      console.log(chatRooms)
       console.log(chatRooms.data)
+      console.log(typeof chatRooms.data)
       ctx.chatRoomsArrayHandler(chatRooms.data)
       setLoading(false);
     };
@@ -30,15 +32,16 @@ const Profile = () => {
   }, []);
 
   const rightHandler = async () => {
-    console.log(profileArray[0].id);
     const bodyObj = {
       userId: localStorage.getItem("id"),
       otherUserId: profileArray[0].id,
       token: localStorage.getItem("token"),
     };
     const data = await axios.post("/like", bodyObj);
-    console.log(data.data)
-    ctx.chatRoomsArrayHandler(data.data)
+    console.log(data)
+    if(data.data !== 'yay'){
+      ctx.chatRoomsArrayHandler(data.data)
+    }
     let newArr = profileArray.slice(1);
 
     setProfileArray(newArr);
@@ -46,14 +49,12 @@ const Profile = () => {
   };
 
   const leftHandler = async () => {
-    console.log(profileArray[0].id);
     const bodyObj = {
       userId: localStorage.getItem("id"),
       otherUserId: profileArray[0].id,
       token: localStorage.getItem("token"),
     };
     await axios.post("/dislike", bodyObj);
-    console.log(profileArray)
 
     setPreviousProfile(profileArray[0])
     let newArr = profileArray.slice(1);
@@ -64,14 +65,11 @@ const Profile = () => {
   const previousProfileHandler = async () => {
     let newArr = profileArray;
     newArr.unshift(previosProfile)
-    console.log(profileArray)
-    console.log(newArr)
+
     setProfileArray(newArr);
     setEnableRedo(false)
-    console.log(ctx.chatRooms)
   };
 
-  console.log(previosProfile)
 
   return (
     <div>

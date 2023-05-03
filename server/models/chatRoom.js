@@ -12,11 +12,17 @@ module.exports = {
         },
         user_1: {
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'id' }
+        },
+        user_1_name: {
+            type: DataTypes.STRING,
+            allowNull: true,
         },
         user_2: {
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'id' }
+        },
+        user_2_name: {
+            type: DataTypes.STRING,
+            allowNull: true,
         }
     })
 }

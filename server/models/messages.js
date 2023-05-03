@@ -12,11 +12,9 @@ module.exports = {
         },
         room_id: {
             type: DataTypes.INTEGER,
-            references: { model: 'chatRooms', key: 'id' }
         },
         user_id: {
             type: DataTypes.INTEGER,
-            references: { model: 'users', key: 'id' }
         },
         message: {
             type: DataTypes.TEXT,

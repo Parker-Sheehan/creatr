@@ -43,12 +43,9 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
 
 
     const chatRoomsArrayHandler = (arr:chatRoom[]) => {
-        console.log(arr[0])
-
         setchatRoomsArray(arr)
     }
 
-    console.log(typeof chatRoomsArray)
 
     const login = (token: string, exp:number, Id: number, bio: string, photo_added: boolean, name: string) => {
     localStorage.setItem("token", token)

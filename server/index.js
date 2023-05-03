@@ -23,24 +23,13 @@ const io = new Server(server, {
     }
 })
 
-io.on("connection", (socket) => {
-    console.log(`User Connected: ${socket.id}`)
-
-    socket.on('join_room', (data) => {
-        socket.join(data);
-    });
-
-    socket.on('send_message', (data) => {
-        socket.broadcast.emit("receive_message", data)
-    })
-})
 
 const {signUp, logIn, addInfo} = require('./controller/account')
-const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser, chatRoom} = require('./controller/interaction')
+const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser, chatRoom, sendMessage} = require('./controller/interaction')
 
 
 User.hasMany(Interaction)
-Interaction.belongsTo(User, {foreignKey: 'doingInteractiond'})
+Interaction.belongsTo(User)
 
 User.hasMany(Photo)
 Photo.belongsTo(User)
@@ -70,11 +59,26 @@ app.delete('/destroy', authenticate, destroyUser)
 app.post('/like', authenticate, likeUser)
 app.post('/dislike', authenticate, dislikeUser)
 app.post('/chatRoom', authenticate, chatRoom)
+app.post('/sendMessage', authenticate, sendMessage)
 
+io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`)
+
+    socket.on('join_room', (data) => {
+        console.log(`joining room ${data}`)
+        socket.join(data.userId);
+    });
+
+    socket.on('send_message', (data) => {
+        console.log(data.message)
+        console.log(data)
+        socket.to(data.room).emit("receive_message", data)
+    })
+})
 
 
 db
-    .sync()
-    .then(() => {
-        server.listen(4000, () => console.log(`db sync successful & server runnig on port 4000`))
-    })
+.sync()
+.then(() => {
+    server.listen(4000, () => console.log(`db sync successful & server runnig on port 4000`))
+})
