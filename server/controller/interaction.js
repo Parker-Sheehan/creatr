@@ -12,14 +12,14 @@ module.exports = {
       let foundInteraction = await Interaction.findAll({
         where: { doingInteraction: userId },
       });
-      console.log("yay");
+      // console.log("yay");
       let beenInteractedWith = [];
       for (let i = 0; i < foundInteraction.length; i++) {
         beenInteractedWith.push(
           foundInteraction[i].dataValues.beingInteractedWith
         );
       }
-      console.log(beenInteractedWith);
+      // console.log(beenInteractedWith);
 
       let foundUsers = await User.findAll({
         where: {
@@ -41,9 +41,9 @@ module.exports = {
         };
         profileArray.push(profileObj);
       }
-      console.log('yay')
-      console.log(foundUsers[0]);
-      console.log(profileArray);
+      // console.log('yay')
+      // console.log(foundUsers[0]);
+      // console.log(profileArray);
       res.status(200).send(profileArray);
     } catch (err) {
       console.log("err in getProfiles");
@@ -57,7 +57,7 @@ module.exports = {
       let foundUser = await User.findOne({
         where: { id: userId },
       });
-      console.log(foundUser);
+      // console.log(foundUser);
       const profileObj = {
         bio: foundUser.dataValues.bio,
         name: foundUser.dataValues.name,
@@ -127,10 +127,10 @@ module.exports = {
           ],
         },
       });
-      console.log("++++++++++++Both_INTERACTED++++++++++++++");
-      console.log(bothInteracted);
+      // console.log("++++++++++++Both_INTERACTED++++++++++++++");
+      // console.log(bothInteracted);
       if (bothInteracted) {
-        console.log('in Both Interacted')
+        // console.log('in Both Interacted')
         await ChatRoom.create({
           user_1: doingInteraction,
           user_2: beingInteractedWith,
@@ -193,9 +193,9 @@ module.exports = {
     try{
       let userId = req.app.locals.userId;
       let {room, message} = req.body
-      console.log(req.body)
-      console.log(room)
-      console.log(message)
+      // console.log(req.body)
+      // console.log(room)
+      // console.log(message)
   
       
       await Message.create({room_id: room, user_id: userId, message:message})
@@ -207,5 +207,17 @@ module.exports = {
       res.sendStatus(400);
     }
     
+  },
+  getMessage: async (req,res) => {
+
+    try{
+      let {room} = req.body
+
+    let findMessage = await Message.findAll({where: {room_id: room}})
+    // console.log(findMessage)
+      return res.status(200).send(findMessage)
+    }catch(err){
+      res.sendStatus(400)
+    }
   }
 };

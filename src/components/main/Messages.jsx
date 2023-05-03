@@ -6,6 +6,7 @@ import AuthContext from "../../store/AuthContext";
 import ChatRoom from "./ChatRoom";
 import { IoArrowBack } from "react-icons/io5";
 import axios from "axios";
+import { async } from "@firebase/util";
 const socket = io.connect("http://localhost:4000");
 
 const Messages = () => {
@@ -31,20 +32,33 @@ const Messages = () => {
     setMessagesArray(messages.data);
   };
 
-  useEffect(async () => {
-    socket.on("receive_message", (data) => {
+  useEffect(() => {
+    console.log('in useEffect')
 
-      setMessageReceived(data.message);
-    });
-    let bodyObj = {
-      token: localStorage.getItem("token"),
-    };
+  }, [messageReceived, room]);
 
-    const messages = await axios.post("/sendMessage", bodyObj);
-    console.log(messages.data);
-    setMessagesArray(messages.data);
+  socket.on("receive_message", (data) => {
 
-  }, [socket]);
+    console.log(data.message)
+    console.log("WUuUUUUUUuuUuuUuuUuuuuuuuuUUUUUW")
+
+    const messagesArrayHandler = async() => {
+      let bodyObj = {
+        token: localStorage.getItem("token"),
+        room: data.room
+      };
+      const messages = await axios.post("/getMessage", bodyObj);
+      console.log("++++++++++++++++++++++++++++++++++++")
+      console.log(messages.data);
+      setMessagesArray(messages.data);
+    }
+
+
+    setMessageReceived(data.message);
+    messagesArrayHandler()
+  });
+
+
 
   const mapRooms = () => {
     let chatRoomArray = [...ctx.chatRooms];
@@ -53,11 +67,22 @@ const Messages = () => {
     });
   };
 
-  const inRoomHandler = (roomId) => {
+  const inRoomHandler = async(roomId) => {
     console.log(roomId);
     setInRoom(!inRoom);
     setRoom(roomId);
     socket.emit("join_room", roomId);
+
+    let bodyObj = {
+      token: localStorage.getItem("token"),
+      room: roomId
+    };
+
+      const messages = await axios.post("/getMessage", bodyObj);
+      console.log(messages.data);
+      setMessagesArray(messages.data);
+  
+      // handleSetMessagesArray()
   };
 
   if (!inRoom) {

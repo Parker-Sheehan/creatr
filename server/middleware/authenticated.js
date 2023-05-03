@@ -16,7 +16,7 @@ module.exports = {
         
         try{
             verify = jwt.verify(token, SECRET) 
-            console.log(verify)
+            // console.log(verify)
         }catch(err){
 
             throw err
