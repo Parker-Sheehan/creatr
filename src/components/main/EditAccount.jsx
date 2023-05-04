@@ -55,12 +55,12 @@ const EditAccount = () => {
         if (!urls[0]) {
           const uploadObj = {
             token: localStorage.getItem("token"),
-            image: localStorage.getItem("Image_url"),
+            image: localStorage.getItem("photo_added"),
             bio: bioState,
             name: nameState,
           };
 
-          console.log(bioState)
+          console.log(uploadObj.image)
 
 
           axios
@@ -70,7 +70,7 @@ const EditAccount = () => {
               localStorage.setItem("bio", data.data.bio);
               localStorage.setItem("name", data.data.name);
 
-            //   navigate("/");
+              navigate("/profile");
             })
             .catch((err) => console.log(err));
         } else {
@@ -90,7 +90,7 @@ const EditAccount = () => {
               localStorage.setItem("bio", data.data.bio);
               localStorage.setItem("photo_added", data.data.photo_added);
               localStorage.setItem("name", data.data.name);
-            //   navigate("/");
+              navigate("/profile");
             })
             .catch((err) => console.log(err));
         }

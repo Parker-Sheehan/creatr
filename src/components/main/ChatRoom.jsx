@@ -19,7 +19,7 @@ const ChatRoom = (props) => {
 
   return (
     <div className={styles.innerCard} onClick={joinRoom}>
-        {name()}
+        {props.name}
     </div>
   );
 };

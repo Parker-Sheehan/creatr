@@ -134,6 +134,8 @@ module.exports = {
         await ChatRoom.create({
           user_1: doingInteraction,
           user_2: beingInteractedWith,
+          user_1_name: req.body.userName,
+          user_2_name: req.body.otherUserName,
         });
         let arrOfChatRooms = await ChatRoom.findAll({
           where: {
@@ -192,13 +194,13 @@ module.exports = {
   sendMessage: async (req,res) => {
     try{
       let userId = req.app.locals.userId;
-      let {room, message} = req.body
+      let {room, message, name} = req.body
       // console.log(req.body)
       // console.log(room)
       // console.log(message)
   
       
-      await Message.create({room_id: room, user_id: userId, message:message})
+      await Message.create({room_id: room, user_id: userId, message:message, name: name})
       let findMessage = await Message.findAll({where: {room_id: room}})
       return res.status(200).send(findMessage)
     }catch (err) {

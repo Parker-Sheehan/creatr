@@ -21,6 +21,7 @@ const Messages = () => {
     let userId = localStorage.getItem("id");
     let bodyObj = {
       token: localStorage.getItem("token"),
+      name: localStorage.getItem("name"),
       message,
       room,
       userId,
@@ -33,32 +34,29 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    console.log('in useEffect')
-
+    console.log("in useEffect");
   }, [messageReceived, room]);
 
   socket.on("receive_message", (data) => {
+    console.log(data.message);
+    console.log("WUuUUUUUUuuUuuUuuUuuuuuuuuUUUUUW");
 
-    console.log(data.message)
-    console.log("WUuUUUUUUuuUuuUuuUuuuuuuuuUUUUUW")
-
-    const messagesArrayHandler = async() => {
+    const messagesArrayHandler = async () => {
       let bodyObj = {
         token: localStorage.getItem("token"),
-        room: data.room
+        room: data.room,
       };
       const messages = await axios.post("/getMessage", bodyObj);
-      console.log("++++++++++++++++++++++++++++++++++++")
+      console.log("++++++++++++++++++++++++++++++++++++");
       console.log(messages.data);
       setMessagesArray(messages.data);
-    }
-
+    };
 
     setMessageReceived(data.message);
-    messagesArrayHandler()
+    messagesArrayHandler();
   });
 
-
+  console.log(ctx.chatRooms[3]);
 
   const mapRooms = () => {
     let chatRoomArray = [...ctx.chatRooms];
@@ -67,7 +65,7 @@ const Messages = () => {
     });
   };
 
-  const inRoomHandler = async(roomId) => {
+  const inRoomHandler = async (roomId) => {
     console.log(roomId);
     setInRoom(!inRoom);
     setRoom(roomId);
@@ -75,27 +73,36 @@ const Messages = () => {
 
     let bodyObj = {
       token: localStorage.getItem("token"),
-      room: roomId
+      room: roomId,
     };
 
-      const messages = await axios.post("/getMessage", bodyObj);
-      console.log(messages.data);
-      setMessagesArray(messages.data);
-  
-      // handleSetMessagesArray()
+    const messages = await axios.post("/getMessage", bodyObj);
+    console.log(messages.data);
+    setMessagesArray(messages.data);
+
+    // handleSetMessagesArray()
   };
+
+  const otherName = ctx.chatRooms;
 
   if (!inRoom) {
     return (
       <div className={styles.main}>
         <h2>Chat Rooms</h2>
         {ctx.chatRooms.map((room) => {
+          // const otherName = room.name
+          console.log(room.user_1_name);
           return (
             <ChatRoom
               inRoomHandler={inRoomHandler}
               info={room}
               id={room.id}
               key={room.id}
+              name={
+                room.user_1_name === localStorage.getItem("name")
+                  ? room.user_2_name
+                  : room.user_1_name
+              }
             />
           );
         })}
@@ -106,28 +113,32 @@ const Messages = () => {
   return (
     <div className={styles.main}>
       <div style={{ alignSelf: "start" }}>
-      <IoArrowBack
-        onClick={() => {
-          setInRoom(!inRoom);
-        }}
-        size={30}
-      />
+        <IoArrowBack
+          onClick={() => {
+            setInRoom(!inRoom);
+          }}
+          size={30}
+        />
       </div>
       {messagesArray.map((message) => {
         if (message.user_id == localStorage.getItem("id")) {
-          return (<>
-            <div className={styles.MyMessage}>
-              <p>{message.message}</p>
-            </div>
+          return (
+            <>
+              <h6 style={{color:"white", alignSelf:'flex-end', margin:'5px'}}>{message.name}</h6>
+              <div className={styles.MyMessage}>
+                <p>{message.message}</p>
+              </div>
             </>
           );
         } else {
           return (
-            <div className={styles.TheirMessage}>
-              <h6>their</h6>
-
-              <p>{message.message}</p>
-            </div>
+            <>
+                <h6 style={{color:"white", alignSelf:'flex-start', margin:'5px'}}>{message.name}</h6>
+              <div className={styles.TheirMessage}>
+                <p>what</p>
+                <p>{message.message}</p>
+              </div>
+            </>
           );
         }
       })}

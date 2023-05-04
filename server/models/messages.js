@@ -20,5 +20,8 @@ module.exports = {
             type: DataTypes.TEXT,
             allowNull:false
         },
+        name: {
+            type: DataTypes.TEXT
+        }
     })
 }

@@ -7,6 +7,7 @@
     padding: 15px;
     background-color: white;
     box-shadow: 1px 3px 10px rgba(0,0,0,0.5);
+    border:black 1px solid;
     margin: 1px;
     width: 20vw;
 }

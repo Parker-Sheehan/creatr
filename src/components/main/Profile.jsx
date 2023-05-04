@@ -34,7 +34,9 @@ const Profile = () => {
   const rightHandler = async () => {
     const bodyObj = {
       userId: localStorage.getItem("id"),
+      userName: localStorage.getItem("name"),
       otherUserId: profileArray[0].id,
+      otherUserName: profileArray[0].name,
       token: localStorage.getItem("token"),
     };
     const data = await axios.post("/like", bodyObj);
@@ -51,11 +53,13 @@ const Profile = () => {
   const leftHandler = async () => {
     const bodyObj = {
       userId: localStorage.getItem("id"),
+      userName: localStorage.getItem("name"),
       otherUserId: profileArray[0].id,
+      otherUserName: profileArray[0].name,
       token: localStorage.getItem("token"),
     };
-    await axios.post("/dislike", bodyObj);
 
+    await axios.post("/dislike", bodyObj);
     setPreviousProfile(profileArray[0])
     let newArr = profileArray.slice(1);
     setProfileArray(newArr);
