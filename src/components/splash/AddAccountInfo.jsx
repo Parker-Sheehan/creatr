@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styles from "./AddAccountInfo.module.css";
 import useForm from "../../hooks/useForm";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
 
 const AddAccountInfo = () => {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const [rawFiles, setRawFiles] = useState([]);
   const [images, setImages] = useState([]);
@@ -20,7 +20,7 @@ const AddAccountInfo = () => {
       try {
         const storageRef = await ref(
           storage,
-          `/${localStorage.getItem('id')}/${file.name}`
+          `/${localStorage.getItem("id")}/${file.name}`
         );
         const snapshot = await uploadBytes(storageRef, file);
         const url = await getDownloadURL(snapshot.ref);
@@ -47,19 +47,20 @@ const AddAccountInfo = () => {
         console.log(urls[0]);
 
         const uploadObj = {
-          token: localStorage.getItem('token'),
+          token: localStorage.getItem("token"),
           image: urls[0],
-          bio: textAreaInput
-        }
-    
-        axios.put(`/addInfo/${localStorage.getItem('id')}`, uploadObj)
-            .then((data) => {
-              console.log(data.data)
-              localStorage.setItem('bio', data.data.bio)
-              localStorage.setItem('photo_added', data.data.photo_added)
-              navigate("/")
-            })
-            .catch(err => console.log(err))
+          bio: textAreaInput,
+        };
+
+        axios
+          .put(`/addInfo/${localStorage.getItem("id")}`, uploadObj)
+          .then((data) => {
+            console.log(data.data);
+            localStorage.setItem("bio", data.data.bio);
+            localStorage.setItem("photo_added", data.data.photo_added);
+            navigate("/");
+          })
+          .catch((err) => console.log(err));
         // const bodyObj = {
         //   userId: userInfo.id,
         //   content: postref.current.value,
@@ -74,35 +75,33 @@ const AddAccountInfo = () => {
         //     console.log(err);
         //   });
       });
-
-
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log(fileInput)
+    console.log(fileInput);
 
     const uploadObj = {
-      token: localStorage.getItem('token'),
+      token: localStorage.getItem("token"),
       image: fileInput,
-      bio: textAreaInput
-    }
+      bio: textAreaInput,
+    };
 
-    axios.put(`/addInfo/${localStorage.getItem('id')}`, uploadObj)
-        .then((data) => {
-          console.log(data.data)
-        })
-        .catch(err => console.log(err))
+    axios
+      .put(`/addInfo/${localStorage.getItem("id")}`, uploadObj)
+      .then((data) => {
+        console.log(data.data);
+      })
+      .catch((err) => console.log(err));
 
-
-    resetTextArea()
-    resetFile()
-
+    resetTextArea();
+    resetFile();
   };
 
   console.log(images);
 
   const uploadMultipleFiles = (e) => {
+    // fileInputHandler()
     const raw = [];
     const newImages = [];
     setRawFiles(e.target.files);
@@ -114,7 +113,13 @@ const AddAccountInfo = () => {
   };
 
   const displayImages = images.map((img, i) => {
-    return <img src={img} className="preview-image" style={{height: "200px", width: "200px"}}/>;
+    return (
+      <img
+        src={img}
+        className="preview-image"
+        style={{ height: "200px", width: "200px" }}
+      />
+    );
   });
 
   const {
@@ -135,7 +140,7 @@ const AddAccountInfo = () => {
     reset: resetFile,
   } = useForm((input) => input);
 
-  const addInfoAllValid = textAreaIsValid && rawFiles[0];
+  const addInfoAllValid = textAreaIsValid && fileIsValid;
 
   const textAreaInputClasses = textAreaHasError
     ? `${styles.textarea} ${styles.invalid}`
@@ -146,8 +151,6 @@ const AddAccountInfo = () => {
     : styles.control;
 
   const addInfoSubmitButtonClasses = addInfoAllValid ? styles.btn : styles.btnW;
-
-  
 
   return (
     <form onSubmit={handleSubmit} className={styles.main}>
@@ -160,7 +163,12 @@ const AddAccountInfo = () => {
           className={fileInputClasses}
           id="file"
           // value={rawFiles[0]}
-          onChange={uploadMultipleFiles}
+
+          value={fileInput}
+          onChange={
+            uploadMultipleFiles
+          }
+          onInput={fileInputHandler}
           onBlur={fileTouchedHandler}
           accept="image/*"
         />

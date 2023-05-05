@@ -112,13 +112,29 @@ const Messages = () => {
 
   return (
     <div className={styles.main}>
-      <div style={{ alignSelf: "start" }}>
+      <div style={{ alignSelf: "start",  display: 'flex',justifyContent:'space-between', width: '20vw'}}>
         <IoArrowBack
           onClick={() => {
             setInRoom(!inRoom);
           }}
           size={30}
+          style={{alignSelf:'flex-start'}}
         />
+        <div style={{display:'flex'}}>
+          <div style={{
+                  backgroundImage: `URL("https://firebasestorage.googleapis.com/v0/b/creatr-7ee7c.appspot.com/o/1%2FIMG_6787.jpg?alt=media&token=a01df74a-691a-451a-a07b-35078c7ceae0")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "cover",
+                  backgroundPositionX: "50%",
+                  backgroundPositionY: "50%",
+                  width: '30px',
+                  height: '30px',
+                  borderRadius:"100%",
+                  marginRight:'10px'
+                }}></div>
+        <h2 style={{textAlign: 'center'}}>Parker</h2>
+        </div>
+        <div></div>
       </div>
       {messagesArray.map((message) => {
         if (message.user_id == localStorage.getItem("id")) {
@@ -135,7 +151,6 @@ const Messages = () => {
             <>
                 <h6 style={{color:"white", alignSelf:'flex-start', margin:'5px'}}>{message.name}</h6>
               <div className={styles.TheirMessage}>
-                <p>what</p>
                 <p>{message.message}</p>
               </div>
             </>

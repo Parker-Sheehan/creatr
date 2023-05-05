@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
+import {BsXCircle, BsRewindCircle, BsCheckCircle} from 'react-icons/bs'
 import AuthContext from "../../store/AuthContext";
+
 
 import styles from "./Profile.module.css";
 
@@ -84,7 +86,7 @@ const Profile = () => {
       ) : (
         <div className={styles.main}>
           <div className={styles.profile}>
-            {profileArray.length === 0 && <h2>No more profiles</h2>}
+            {profileArray.length === 0 && <h2 className={styles.NoMore}>No more profiles</h2>}
             {profileArray.length > 0 && (
               <div
                 style={{
@@ -107,11 +109,11 @@ const Profile = () => {
           </div>
           <div className={styles.btn_container}>
             <button disabled={profileArray.length === 0} onClick={leftHandler}>
-              No
+              <BsXCircle size={80} color={'red'}/>
             </button>
-            <button disabled={!enableRedo} onClick={previousProfileHandler}>Go Back</button>
+            <button disabled={!enableRedo} onClick={previousProfileHandler}><BsRewindCircle size={80} color={'gold'}/></button>
             <button disabled={profileArray.length === 0} onClick={rightHandler}>
-              Yes
+              <BsCheckCircle size={80} color={'lightgreen'}/>
             </button>
           </div>
         </div>
