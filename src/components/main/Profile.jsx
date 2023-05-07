@@ -2,11 +2,15 @@ import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import {BsXCircle, BsRewindCircle, BsCheckCircle} from 'react-icons/bs'
 import AuthContext from "../../store/AuthContext";
+import io from "socket.io-client";
+import Swal from "sweetalert2";
+
 
 
 import styles from "./Profile.module.css";
 
 const Profile = () => {
+  const socket = io.connect("http://localhost:4000");
   const [loading, setLoading] = useState(true);
   const [profileArray, setProfileArray] = useState([]);
   const [enableRedo, setEnableRedo] = useState(false)
@@ -27,11 +31,27 @@ const Profile = () => {
       console.log(chatRooms.data)
       console.log(typeof chatRooms.data)
       ctx.chatRoomsArrayHandler(chatRooms.data)
+      
+      let room = `${localStorage.getItem("id")} ${localStorage.getItem('name')}`
+      socket.emit("join_room", room);
+
       setLoading(false);
     };
-
+    
     fetchData();
   }, []);
+  
+
+  socket.on("match_made", (data) => {
+    console.log('yo')
+    console.log(data)
+    console.log(data.data)
+    Swal.fire({
+      title: 'New Match!',
+      text: `you just matched with ${data}!`,
+      confirmButtonText: 'Cool'
+    })
+  });
 
   const rightHandler = async () => {
     const bodyObj = {
@@ -75,6 +95,9 @@ const Profile = () => {
     setProfileArray(newArr);
     setEnableRedo(false)
   };
+
+
+
 
 
   return (

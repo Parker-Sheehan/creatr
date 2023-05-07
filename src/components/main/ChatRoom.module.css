@@ -11,3 +11,7 @@
     margin: 1px;
     width: 20vw;
 }
+
+.newMessage{
+    background-color: red;
+}

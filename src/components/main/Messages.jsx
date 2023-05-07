@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import styles from "./Messages.module.css";
-import io from "socket.io-client";
 import Card from "../ui/Card";
 import AuthContext from "../../store/AuthContext";
 import ChatRoom from "./ChatRoom";
 import { IoArrowBack } from "react-icons/io5";
 import axios from "axios";
+import io from "socket.io-client";
 import { async } from "@firebase/util";
 const socket = io.connect("http://localhost:4000");
 
@@ -56,7 +56,7 @@ const Messages = () => {
     messagesArrayHandler();
   });
 
-  console.log(ctx.chatRooms[3]);
+  // console.log({... ctx.chatRooms.arrOfChatRooms[0], ...ctx.chatRooms.arrOfPfp[0]});
 
   const mapRooms = () => {
     let chatRoomArray = [...ctx.chatRooms];
@@ -70,6 +70,7 @@ const Messages = () => {
     setInRoom(!inRoom);
     setRoom(roomId);
     socket.emit("join_room", roomId);
+    
 
     let bodyObj = {
       token: localStorage.getItem("token"),
@@ -82,8 +83,6 @@ const Messages = () => {
 
     // handleSetMessagesArray()
   };
-
-  const otherName = ctx.chatRooms;
 
   if (!inRoom) {
     return (
@@ -98,6 +97,7 @@ const Messages = () => {
               info={room}
               id={room.id}
               key={room.id}
+              pfp={room.photo_added}
               name={
                 room.user_1_name === localStorage.getItem("name")
                   ? room.user_2_name
@@ -112,51 +112,76 @@ const Messages = () => {
 
   return (
     <div className={styles.main}>
-      <div style={{ alignSelf: "start",  display: 'flex',justifyContent:'space-between', width: '20vw'}}>
+      <div
+        style={{
+          alignSelf: "start",
+          display: "flex",
+          justifyContent: "space-between",
+          width: "20vw",
+        }}
+      >
         <IoArrowBack
           onClick={() => {
             setInRoom(!inRoom);
           }}
           size={30}
-          style={{alignSelf:'flex-start'}}
+          style={{ alignSelf: "flex-start" }}
         />
-        <div style={{display:'flex'}}>
-          <div style={{
-                  backgroundImage: `URL("https://firebasestorage.googleapis.com/v0/b/creatr-7ee7c.appspot.com/o/1%2FIMG_6787.jpg?alt=media&token=a01df74a-691a-451a-a07b-35078c7ceae0")`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
-                  backgroundPositionX: "50%",
-                  backgroundPositionY: "50%",
-                  width: '30px',
-                  height: '30px',
-                  borderRadius:"100%",
-                  marginRight:'10px'
-                }}></div>
-        <h2 style={{textAlign: 'center'}}>Parker</h2>
+        <div style={{ display: "flex" }}>
+          <div
+            style={{
+              backgroundImage: `URL("https://firebasestorage.googleapis.com/v0/b/creatr-7ee7c.appspot.com/o/1%2FIMG_6787.jpg?alt=media&token=a01df74a-691a-451a-a07b-35078c7ceae0")`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPositionX: "50%",
+              backgroundPositionY: "50%",
+              width: "30px",
+              height: "30px",
+              borderRadius: "100%",
+              marginRight: "10px",
+            }}
+          ></div>
+          <h2 style={{ textAlign: "center" }}>Parker</h2>
         </div>
         <div></div>
       </div>
-      {messagesArray.map((message) => {
-        if (message.user_id == localStorage.getItem("id")) {
-          return (
-            <>
-              <h6 style={{color:"white", alignSelf:'flex-end', margin:'5px'}}>{message.name}</h6>
-              <div className={styles.MyMessage}>
-                <p>{message.message}</p>
-              </div>
-            </>
-          );
-        } else {
-          return (
-            <>
-                <h6 style={{color:"white", alignSelf:'flex-start', margin:'5px'}}>{message.name}</h6>
-              <div className={styles.TheirMessage}>
-                <p>{message.message}</p>
-              </div>
-            </>
-          );
-        }
-      })}
+        {messagesArray.map((message) => {
+          if (message.user_id == localStorage.getItem("id")) {
+            return (
+              <>
+                <h6
+                  style={{
+                    color: "white",
+                    alignSelf: "flex-end",
+                    margin: "5px",
+                  }}
+                >
+                  {message.name}
+                </h6>
+                <div className={styles.MyMessage}>
+                  <p>{message.message}</p>
+                </div>
+              </>
+            );
+          } else {
+            return (
+              <>
+                <h6
+                  style={{
+                    color: "white",
+                    alignSelf: "flex-start",
+                    margin: "5px",
+                  }}
+                >
+                  {message.name}
+                </h6>
+                <div className={styles.TheirMessage}>
+                  <p>{message.message}</p>
+                </div>
+              </>
+            );
+          }
+        })}
       <div>
         <input
           type="text"

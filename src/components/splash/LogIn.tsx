@@ -59,11 +59,12 @@ const LogIn = (props: any) => {
       console.log(data.data);
       let {exp, token, userId, bio, photo_added, name} = data.data
       authCtx.login(token, exp, userId, bio, photo_added, name)
-    });
+    }).then(() => {
+      navigate("/")
+    }).catch(err => console.log(err))
 
     resetLogIn();
     props.setLoadingHandler(false);
-    navigate("/AddAccountInfo")
   };
 
   return (
