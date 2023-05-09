@@ -71,6 +71,26 @@ module.exports = {
       res.sendStatus(400);
     }
   },
+  otherProfile: async (req, res) => {
+    try {
+      let [id, name] = req.body.params.split("+");
+      let foundUser = await User.findOne({
+        where: { [Op.and]: [{ id: id }, { name: name }] },
+      });
+      const profileObj = {
+        bio: foundUser.dataValues.bio,
+        name: foundUser.dataValues.name,
+        photo: foundUser.dataValues.photo_added,
+        id: foundUser.dataValues.id,
+      };
+
+      res.status(200).send(profileObj);
+    } catch (err) {
+      console.log("err in userProfile");
+      console.log(err);
+      res.sendStatus(400);
+    }
+  },
   destroyUser: async (req, res) => {
     try {
       let userId = req.app.locals.userId;
@@ -152,28 +172,32 @@ module.exports = {
             ],
           },
           attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
-        })      
-        let arrOfIdForPfp = []
-        for(let i = 0; i < arrOfChatRooms.length; i++){
-          if (arrOfChatRooms[i].dataValues.user_1 != userId){
-            arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_1}`)
-          }else{
-          arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_2}`)
+        });
+        let arrOfIdForPfp = [];
+        for (let i = 0; i < arrOfChatRooms.length; i++) {
+          if (arrOfChatRooms[i].dataValues.user_1 != doingInteraction) {
+            arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_1}`);
+          } else {
+            arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_2}`);
           }
         }
-        console.log(arrOfIdForPfp)
+        console.log(arrOfIdForPfp);
         let arrOfPfp = await User.findAll({
-          
           where: {
             id: {
-            [Op.in]: arrOfIdForPfp
-          }
-        },
-        attributes: ['photo_added']
-        })
-        console.log('yay')
-        console.log(arrOfPfp[1].dataValues)
-        return res.status(200).send({arrOfChatRooms: [...arrOfChatRooms], arrOfPfp: [...arrOfPfp]});
+              [Op.in]: arrOfIdForPfp,
+            },
+          },
+          attributes: ["photo_added"],
+        });
+        console.log("yay");
+        console.log(arrOfPfp[1].dataValues);
+        return res
+          .status(200)
+          .send({
+            arrOfChatRooms: [...arrOfChatRooms],
+            arrOfPfp: [...arrOfPfp],
+          });
       }
       res.status(200).send("yay");
     } catch (err) {
@@ -207,29 +231,32 @@ module.exports = {
           [Op.or]: [{ user_1: userId }, { user_2: userId }],
         },
         attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
-      })
-      console.log(arrOfChatRooms[0].dataValues)
-      let arrOfIdForPfp = []
-      for(let i = 0; i < arrOfChatRooms.length; i++){
-        if (arrOfChatRooms[i].dataValues.user_1 != userId){
-          arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_1}`)
-        }else{
-        arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_2}`)
+      });
+      if (arrOfChatRooms.length === 0) {
+        return res.status(200).send({ arrOfChatRooms: [...arrOfChatRooms] });
+      }
+      // console.log(arrOfChatRooms[0].dataValues)
+      let arrOfIdForPfp = [];
+      for (let i = 0; i < arrOfChatRooms.length; i++) {
+        if (arrOfChatRooms[i].dataValues.user_1 != userId) {
+          arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_1}`);
+        } else {
+          arrOfIdForPfp.push(`${arrOfChatRooms[i].dataValues.user_2}`);
         }
       }
-      console.log(arrOfIdForPfp)
+      console.log(arrOfIdForPfp);
       let arrOfPfp = await User.findAll({
-        
         where: {
           id: {
-          [Op.in]: arrOfIdForPfp
-        }
-      },
-      attributes: ['photo_added']
-      })
-      console.log('yay')
-      console.log(arrOfPfp[1].dataValues)
-      return res.status(200).send({arrOfChatRooms: [...arrOfChatRooms], arrOfPfp: [...arrOfPfp]});
+            [Op.in]: arrOfIdForPfp,
+          },
+        },
+        attributes: ["photo_added"],
+      });
+      console.log("yay");
+      return res
+        .status(200)
+        .send({ arrOfChatRooms: [...arrOfChatRooms], arrOfPfp: [...arrOfPfp] });
     } catch (err) {
       console.log("err in chatRoom");
       console.log(err);

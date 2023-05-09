@@ -16,33 +16,34 @@ const http = require('http')
 const { Server } = require('socket.io')
 const app = express()
 const server = http.createServer(app)
-// const io = new Server(server, {
-//     cors: {
-//         origin: 'http://localhost:3000',
-//         methods: ["GET", "POST"]
-//     }
-// })
-// global.io = io
 
-// io.on("connection", (socket) => {
-//     console.log(`User Connected: ${socket.id}`)
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ["GET", "POST"]
+    }
+})
+global.io = io
 
-//     socket.on('join_room', (data) => {
-//         console.log(`joining room ${data}`)
-//         socket.join(data);
-//     });
+io.on("connection", (socket) => {
+    console.log(`User Connected: ${socket.id}`)
 
-//     socket.on('send_message', (data) => {
-//         console.log('yay')
-//         console.log(data.message)
-//         console.log(data.room)
-//         socket.to(data.room).emit("receive_message", data)
-//     })
-// })
+    socket.on('join_room', (data) => {
+        console.log(`joining room ${data}`)
+        socket.join(data);
+    });
+
+    socket.on('send_message', (data) => {
+        console.log('yay')
+        console.log(data.message)
+        console.log(data.room)
+        socket.to(data.room).emit("receive_message", data)
+    })
+})
 
 
 const {signUp, logIn, addInfo} = require('./controller/account')
-const {getProfiles, userProfile, destroyUser, likeUser, dislikeUser, chatRoom, sendMessage, getMessage} = require('./controller/interaction')
+const {getProfiles, userProfile, otherProfile, destroyUser, likeUser, dislikeUser, chatRoom, sendMessage, getMessage} = require('./controller/interaction')
 
 
 User.hasMany(Interaction)
@@ -72,6 +73,7 @@ app.put('/addInfo/:id', authenticate ,addInfo)
 //interactability
 app.post('/profiles', authenticate, getProfiles)
 app.post('/userProfile', authenticate, userProfile)
+app.post('/otherProfile', authenticate, otherProfile)
 app.delete('/destroy', authenticate, destroyUser)
 app.post('/like', authenticate, likeUser)
 app.post('/dislike', authenticate, dislikeUser)

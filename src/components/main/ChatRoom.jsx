@@ -10,7 +10,7 @@ const ChatRoom = (props) => {
   const joinRoom = () => {
     console.log(props.info);
     console.log(props.id);
-    props.inRoomHandler(props.id);
+    props.inRoomHandler({id : props.id, pfp: props.pfp, name: props.name});
     let newArray = newMessageArray.filter((x) => {
       if(x !== props.id){
         return x
@@ -21,16 +21,15 @@ const ChatRoom = (props) => {
   };
 
   socket.emit("join_room", props.id);
+
   socket.on("receive_message", (data) => {
     console.log(data)
     console.log(data.message);
-    console.log("WUuUUUUUUuuUuuUuuUuuuuuuuuUUUUUW");
-    // setNewMessage(true)
+    console.log("hello");
     setNewMessageArray((prev) => {
       return [...prev, data.room]
     })
   });
-  console.log(newMessageArray)
 
   const name = () => {
     if (+localStorage.getItem("id") === props.info.user_1) {

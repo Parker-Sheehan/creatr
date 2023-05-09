@@ -44,7 +44,7 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
 
     const chatRoomsArrayHandler = (arr:any) => {
         // {... ctx.chatRooms.arrOfChatRooms[0], ...ctx.chatRooms.arrOfPfp[0]}
-        console.log({...arr.arrOfChatRooms[0], ...arr.arrOfPfp[0]})
+        // console.log({...arr.arrOfChatRooms[0], ...arr.arrOfPfp[0]})
         let combinedArray = []
         for(let i = 0; i < arr.arrOfChatRooms.length; i++){
             console.log('yay')
