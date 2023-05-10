@@ -18,25 +18,27 @@ const Profile = () => {
 
   const ctx = useContext(AuthContext)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const bodyObj = {
-        userId: localStorage.getItem("id"),
-        token: localStorage.getItem("token"),
-      };
-      const data = await axios.post("/profiles", bodyObj);
-      setProfileArray(data.data);
-      const chatRooms = await axios.post("/chatRoom", bodyObj);
-      console.log(chatRooms)
-      console.log(chatRooms.data)
-      console.log(typeof chatRooms.data)
-      ctx.chatRoomsArrayHandler(chatRooms.data)
-      
-      let room = `${localStorage.getItem("id")} ${localStorage.getItem('name')}`
-      socket.emit("join_room", room);
-
-      setLoading(false);
+  const fetchData = async () => {
+    const bodyObj = {
+      userId: localStorage.getItem("id"),
+      token: localStorage.getItem("token"),
     };
+    const data = await axios.post("/profiles", bodyObj);
+    setProfileArray(data.data);
+    const chatRooms = await axios.post("/chatRoom", bodyObj);
+    console.log(chatRooms)
+    console.log(chatRooms.data)
+    console.log(typeof chatRooms.data)
+    ctx.chatRoomsArrayHandler(chatRooms.data)
+
+    let room = `${localStorage.getItem("id")} ${localStorage.getItem('name')}`
+    socket.emit("join_room", room);
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+
     
     fetchData();
   }, []);
@@ -51,6 +53,8 @@ const Profile = () => {
       text: `you just matched with ${data}!`,
       confirmButtonText: 'Cool'
     })
+    fetchData();
+
   });
 
   const rightHandler = async () => {

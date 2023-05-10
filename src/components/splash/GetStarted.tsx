@@ -30,7 +30,7 @@ const GetStarted = () => {
       {loading && <p>Loading...</p>}
       {action === "" && (
         <div className={styles.sub_card}>
-          <h1>Get Started!</h1>
+          <h1 className={styles.logo}>Creatr</h1>
           <button className={styles.btn} onClick={() => setAction("signup")}>
             Sign up
           </button>

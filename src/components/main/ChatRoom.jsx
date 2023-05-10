@@ -40,8 +40,9 @@ const ChatRoom = (props) => {
   };
 
   return (
-    <div className={newMessageArray.includes(props.id) ?  `${styles.innerCard} ${styles.newMessage}`: styles.innerCard } onClick={joinRoom}>
+    <div className={styles.innerCard} onClick={joinRoom}>
       <div
+      className={newMessageArray.includes(props.id) && styles.newMessage}
             style={{
               backgroundImage: `URL("${props.pfp}")`,
               backgroundRepeat: "no-repeat",

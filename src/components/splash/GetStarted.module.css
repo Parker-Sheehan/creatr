@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@700&display=swap');
+
+.logo{
+  font-family: 'Arvo', serif;
+  font-size: 6rem;
+  color: #8656e0d0;
+}
+
 .sub_card {
   height: 425px;
   width: 600px;
@@ -50,3 +58,4 @@
   border-color: #aa0b20;
   background-color: #ffeff1;
 }
+

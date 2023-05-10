@@ -97,6 +97,11 @@ module.exports = {
       User.destroy({
         where: { id: userId },
       });
+      ChatRoom.destroy({
+        where: {
+          [Op.or]: [{ user_1: userId }, { user_2: userId }],
+        },
+      })
       res.sendStatus(200);
     } catch (err) {
       console.log("err in destroyUser");
