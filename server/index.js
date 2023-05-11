@@ -8,6 +8,7 @@ const {Message} = require('./models/messages')
 const {Interaction} = require('./models/interaction')
 const {ChatRoom} = require('./models/chatRoom')
 const {authenticate} = require('./middleware/authenticated')
+const path = require('path')
 
 
 const express = require('express')
@@ -24,6 +25,21 @@ const io = new Server(server, {
     }
 })
 global.io = io
+
+const _dirname = path.dirname("")
+const buldPath = path.join(_dirname, "../src/build")
+
+app.get('/*', function(req, res){
+
+    res.sendFile(
+        path.join(__dirname, "../src/build/indexedDB.html"),
+        function (err){
+            if(err){
+                res.status(500).send(err)
+            }
+        }
+    )
+})
 
 io.on("connection", (socket) => {
     console.log(`User Connected: ${socket.id}`)
