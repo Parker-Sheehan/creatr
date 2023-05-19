@@ -26,9 +26,7 @@ const Profile = () => {
     const data = await axios.post("/profiles", bodyObj);
     setProfileArray(data.data);
     const chatRooms = await axios.post("/chatRoom", bodyObj);
-    console.log(chatRooms)
-    console.log(chatRooms.data)
-    console.log(typeof chatRooms.data)
+
     ctx.chatRoomsArrayHandler(chatRooms.data)
 
     let room = `${localStorage.getItem("id")} ${localStorage.getItem('name')}`
@@ -66,7 +64,6 @@ const Profile = () => {
       token: localStorage.getItem("token"),
     };
     const data = await axios.post("/like", bodyObj);
-    console.log(data)
     if(data.data !== 'yay'){
       ctx.chatRoomsArrayHandler(data.data)
     }

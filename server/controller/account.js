@@ -51,7 +51,6 @@ module.exports = {
       let { email, password } = req.body;
       let foundUser = await User.findOne({ where: { email: email } });
       if (foundUser) {
-        console.log("++++_+_++_+_+_+_+_+_+_+_+__+")
         if (bcrypt.compareSync(password, foundUser.hashedPass)) {
           let token = createToken(
             foundUser.dataValues.email,

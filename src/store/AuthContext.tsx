@@ -50,7 +50,6 @@ export const AuthContextProvider = (children : { children: ReactNode }) => {
             console.log('yay')
             combinedArray.push({...arr.arrOfChatRooms[i], ...arr.arrOfPfp[i]})
         }
-        console.log(combinedArray)
         setchatRoomsArray(combinedArray)
     }
 

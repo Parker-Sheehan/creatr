@@ -80,7 +80,6 @@ const Messages = () => {
 
     // handleSetMessagesArray()
   };
-  console.log(roomInfo)
 
   if (!inRoom) {
     return (

@@ -19,7 +19,6 @@ const UserProfile= () => {
         token: localStorage.getItem("token"),
       };
       const data = await axios.post("/userProfile", bodyObj)
-      console.log(data)
       setProfileArray(data.data)
       setLoading(false)
     }
@@ -28,7 +27,6 @@ const UserProfile= () => {
     
   }, []);
 
-  console.log(profileArray)
 
 
   return (
