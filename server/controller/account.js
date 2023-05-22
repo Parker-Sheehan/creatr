@@ -81,23 +81,18 @@ module.exports = {
   },
   addInfo: async (req,res) => {
     try{
-      // console.log('in addInfo')
-      // console.log(req.body)
-      // console.log(req.params)
+
 
       let {bio, image, name} = req.body
       let userId = req.params.id
 
-      // console.log(req.params.id)
-      // console.log('line 89')
+
       let foundUser = await User.findOne({ where: { id: userId } })
-      // console.log('line 91')
       if(name){
         foundUser.set({bio:bio, photo_added: image, name:name})
       }else{
         foundUser.set({bio:bio, photo_added: image})
       }
-      // console.log('line 93')
       await foundUser.save()
 
 
